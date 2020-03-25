@@ -4,7 +4,7 @@ from basicapp.forms import UserForm,UserProfileInfoForm
 # 
 from django.contrib.auth import login,authenticate,logout
 from django.http import HttpResponse,HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.urls import reverses
 from django.contrib.auth.decorators import login_required
 
 
@@ -13,6 +13,16 @@ from django.contrib.auth.decorators import login_required
 
 def index(request):
     return render(request,'basicapp/index.html')
+
+@login_required
+def special(request):
+    return HttpResponse('you are logged in. congrats!')
+
+
+@login_required
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('index'))
 
 
 def register(request):
@@ -39,9 +49,7 @@ def register(request):
             profile.save()
 
             registered = True
-            
         else:
-
             print(user_form.errors,profile_form.errors)
     else:
         user_form = UserForm()
@@ -56,3 +64,17 @@ def user_login(request):
         password = request.POST.get('password')
 
         user = authenticate(username=username,password=password)
+
+        if user:
+            if user.is_active:
+                login(request,user)
+                return HttpResponseRedirect(reverse('index'))
+            else:
+                return HttpResponse('Account not active')
+        else:
+            print('someone tried to login and failed')
+            print('username: {0} , password:{1}'.format(username,password))
+            return HttpResponse('Invalid login parameters!!')
+    else:
+        return render(request,'basicapp/login.html',{})
+
