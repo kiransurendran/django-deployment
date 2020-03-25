@@ -24,6 +24,7 @@ urlpatterns = [
     path('basicapp/',include('basicapp.urls')),
     path('logout/',views.user_logout,name='logout'),
     path('special/',views.special,name='special'),
+    # dhcdldsbslc
     
 
     
