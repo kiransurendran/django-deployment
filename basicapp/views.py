@@ -4,7 +4,7 @@ from basicapp.forms import UserForm,UserProfileInfoForm
 # 
 from django.contrib.auth import login,authenticate,logout
 from django.http import HttpResponse,HttpResponseRedirect
-from django.urls import reverses
+from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
 
